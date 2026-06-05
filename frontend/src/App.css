@@ -572,8 +572,8 @@ input, textarea, select { font-family: var(--font); }
 /* Willkommen */
 .tablet-welcome {
   flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center; padding: 60px 54px; gap: 30px;
+  align-items: center; justify-content: space-around;
+  text-align: center; padding: 40px 54px; gap: 30px;
 }
 /*}.welcome-mark {
   width: 108px; height: 108px;
@@ -613,7 +613,7 @@ input, textarea, select { font-family: var(--font); }
   background: var(--blue-700); color: #fff;
   border: none; border-radius: 18px;
   font-size: 25.5px; font-weight: 600; letter-spacing: -0.15px;
-  transition: background .15s; margin-top: 6px;
+  transition: background .15s;
 }
 .btn-start:hover { background: var(--blue-800); }
 

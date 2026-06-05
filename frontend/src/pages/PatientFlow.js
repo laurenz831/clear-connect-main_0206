@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { post } from '../services/api';
 import BodyModel from '../components/Common/BodyModel';
 import logo from '../assets/images/Logo.png';
@@ -144,6 +144,13 @@ export default function PatientFlow({ state, api }) {
   const [bodyParts, setBodyParts] = useState([]);
   const [calDate, setCalDate]     = useState(null);
 
+  // Wenn Konsultation neu startet, zurück zum Willkommensbildschirm
+  useEffect(() => {
+    if (state.phase === 'welcome') {
+      setLocalStep('welcome');
+    }
+  }, [state.phase]);
+
   const { dot, label } = tabletStatus(state.phase);
   const aktuelleQ = state.currentQuestion;
 
@@ -255,12 +262,6 @@ function getQAPaare(conversation) {
 
 function WillkommenBildschirm({ onStart }) {
   const videoRef = useRef(null);
-  const [videoLäuft, setVideoLäuft] = useState(false);
-
-  const videoStarten = () => {
-    setVideoLäuft(true);
-    videoRef.current.play();
-  };
 
   return (
     <div className="tablet-welcome">
@@ -274,15 +275,9 @@ function WillkommenBildschirm({ onStart }) {
         <video
           ref={videoRef}
           src={erklaervideo}
-          controls={videoLäuft}
+          controls
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
         />
-        {!videoLäuft && (
-          <button type="button" className="welcome-video-placeholder" onClick={videoStarten}>
-            <div className="play-icon">▶</div>
-            <span>Erklärvideo ansehen</span>
-          </button>
-        )}
       </div>
 
       <button className="btn-start" onClick={onStart}>
