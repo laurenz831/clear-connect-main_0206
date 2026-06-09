@@ -1,8 +1,6 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { post } from '../services/api';
 import BodyModel from '../components/Common/BodyModel';
-import logo from '../assets/images/Logo.png';
-import erklaervideo from '../assets/videos/erklaervideo.mp4';
 
 const KATEGORIE_TEXT = {
   pain:       'Schmerzen',
@@ -11,12 +9,6 @@ const KATEGORIE_TEXT = {
   other:      'Sonstiges',
 };
 
-const KATEGORIE_ICONS = {
-  pain:       '+',
-  checkup:    'V',
-  medication: 'M',
-  other:      '?',
-};
 
 function tabletStatus(phase) {
   if (phase === 'welcome' || phase === 'waiting') return { dot: 'waiting',   label: 'Wartend' };
@@ -144,13 +136,6 @@ export default function PatientFlow({ state, api }) {
   const [bodyParts, setBodyParts] = useState([]);
   const [calDate, setCalDate]     = useState(null);
 
-  // Wenn Konsultation neu startet, zurück zum Willkommensbildschirm
-  useEffect(() => {
-    if (state.phase === 'welcome') {
-      setLocalStep('welcome');
-    }
-  }, [state.phase]);
-
   const { dot, label } = tabletStatus(state.phase);
   const aktuelleQ = state.currentQuestion;
 
@@ -229,8 +214,8 @@ export default function PatientFlow({ state, api }) {
     <div className="patient-tablet">
       <div className="tablet-header">
         <div className="tablet-logo">
-          <div className="tablet-logo-mark"><img src={logo} style={{ width: '160px', height: 'auto', marginLeft: '90px'}} /></div>
-          {/* <span className="tablet-logo-name">ClearConnect</span> */}
+          <div className="tablet-logo-mark">CC</div>
+          <span className="tablet-logo-name">ClearConnect</span>
         </div>
         <div className="tablet-status">
           <div className={`status-dot ${dot}`} />
@@ -261,25 +246,25 @@ function getQAPaare(conversation) {
 // ── Bildschirme ──────────────────────────────────────────────────────────────
 
 function WillkommenBildschirm({ onStart }) {
-  const videoRef = useRef(null);
-
   return (
     <div className="tablet-welcome">
-      <div className="welcome-mark"><img src={logo} style={{ width: '160px', height: 'auto'}} /></div>
+      <div className="welcome-mark">CC</div>
       <div className="welcome-title">Willkommen</div>
       <div className="welcome-sub">
         Dieses Tablet hilft Ihnen, mit Ihrem Arzt zu sprechen. Tippen Sie auf die Buttons, um zu antworten.
       </div>
-
       <div className="welcome-video">
         <video
-          ref={videoRef}
-          src={erklaervideo}
+          src="/videos/willkommen.mp4"
           controls
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{ width: '100%', height: '100%', borderRadius: 12, display: 'block' }}
+          onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
         />
+        <div className="welcome-video-placeholder" style={{ display: 'none' }}>
+          <div className="play-icon">▶</div>
+          <span>Erklärvideo (Video hier einfügen)</span>
+        </div>
       </div>
-
       <button className="btn-start" onClick={onStart}>
         Weiter
       </button>
